@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Insurance Claim Validator Dashboard</title>
+	<link rel="stylesheet" href="../static/validator_dashboard_page.css">
+</head>
+<style>
+    body {
+        background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQOemEV1MA6EtVfxzoUUCRYSqtuNmx8gv_BCg&s'); /* Replace 'your-image.jpg' with the path to your image */
+        background-color: #f0f0f0; /* Replace #f0f0f0 with your desired background color */
+        background-size: cover;
+        background-position: center;
+        font-family: Arial, sans-serif; /* Optional: Change the font family */
+        margin: 0;
+        padding: 0;
+    }
+    </style>
+
+<body>
+    <h1>Insurance and Validator Dashboard</h1>
+
+    <h2>vehicle List</h2>
+    <div id="claimsList"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.6.0/dist/web3.min.js"></script>
+    <script>
+        const web3 = new Web3(window.ethereum);
+
+        const contractAddress = '0xBd10480dFC975D72430D0706db365dBe9785D7C7';
+        const abi = [
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "_details",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_imgPath",
+				"type": "string"
+			}
+		],
+		"name": "applyClaim",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_claimId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "_status",
+				"type": "string"
+			}
+		],
+		"name": "updateClaimStatus",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "claimCount",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "claims",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "applicant",
+				"type": "address"
+			},
+			{
+				"internalType": "string",
+				"name": "details",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "imgPath",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "status",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	}
+]; // Paste your contract ABI here
+        const contract = new web3.eth.Contract(abi, contractAddress);
+
+        async function displayClaims() {
+            const claimsList = document.getElementById('claimsList');
+            claimsList.innerHTML = '';
+
+            const claimCount = await contract.methods.claimCount().call({ from: web3.eth.defaultAccount });
+            for (let i = 1; i <= claimCount; i++) {
+                const claim = await contract.methods.claims(i).call({ from: web3.eth.defaultAccount });
+                claimsList.innerHTML += `
+                    <div>
+                        <p>Claim ID: ${i}</p>
+                        <p>Applicant: ${claim.applicant}</p>
+                        <p>Details: ${claim.details}</p>
+                        <p>Status: ${claim.status}</p>
+                        <img src="assets/${claim.imgPath}" alt="Insurance Image"><br>
+                        <button onclick="updateClaimStatus(${i}, 'Accepted')">Accept</button>
+                        <button onclick="updateClaimStatus(${i}, 'Rejected')">Reject</button>
+                    </div>
+                    <hr>
+                `;
+            }
+        }
+
+        async function updateClaimStatus(claimId, status) {
+            await contract.methods.updateClaimStatus(claimId, status).send({ from: web3.eth.defaultAccount });
+            alert(`Claim ${claimId} has been ${status}`);
+            displayClaims();
+        }
+
+        window.ethereum.enable().then(() => {
+            web3.eth.getAccounts().then((accounts) => {
+                web3.eth.defaultAccount = accounts[0];
+                displayClaims();
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,72 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+h1 {
+    text-align: center;
+    margin-top: 30px;
+    color: #333; /* Dark gray text */
+}
+
+h2 {
+    margin-top: 20px;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+#claimsList {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+div {
+    background-color: #fff; /* White background */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Shadow effect */
+    margin-bottom: 20px;
+}
+
+p {
+    margin: 10px 0;
+}
+
+button {
+    padding: 10px 20px;
+    background-color: violet; /* Green color */
+    color: #fff; /* White text */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: violet; /* Darker green color on hover */
+}
+
+button:last-child {
+    margin-left: 10px;
+    background-color: yellow; /* Red color */
+}
+
+button:last-child:hover {
+    background-color: #8b0000; /* Darker red color on hover */
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+
+hr {
+    border: none;
+    border-top: 1px solid #ccc; /* Light gray border */
+    margin-top: 20px;
+    margin-bottom: 20px;
+}

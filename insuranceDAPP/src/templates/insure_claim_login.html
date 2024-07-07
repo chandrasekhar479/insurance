@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Insurance Claim Login</title>
+    <link rel="stylesheet" href="../static/insure_claim_login_page.css">
+</head>
+<style>
+    body {
+        background-image: url('https://i.pinimg.com/736x/8d/49/62/8d4962d77383fb3c36be4f444f95fbcf.jpg'); /* Replace 'your-image.jpg' with the path to your image */
+        background-color: #f0f0f0; /* Replace #f0f0f0 with your desired background color */
+        background-size: cover;
+        background-position: center;
+        font-family: Arial, sans-serif; /* Optional: Change the font family */
+        margin: 0;
+        padding: 0;
+    }
+    </style>
+<body>
+    <h1>Insurance  Login</h1>
+
+    <form id="login">
+        <input type="text" id="username" placeholder="Username" required><br>
+        <input type="password" id="password" placeholder="Password" required><br>
+        <button type="submit">Login</button>
+    </form>
+
+    <p>Don't have an account? <a href="insure_claim_signup.html">Sign Up</a></p>
+
+    <div id="errorDialog" class="dialog">
+        <p id="errorMessage"></p>
+        <button id="closeDialog">Close</button>
+    </div>
+
+    <script>
+        document.getElementById('login').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const storedUsername = localStorage.getItem('insure_claim_username');
+            const storedPassword = localStorage.getItem('insure_claim_password');
+            if (username === storedUsername && password === storedPassword) {
+                alert('Login Successful');
+                window.location.href = 'insure_claim_signup.html'; // Redirect to dashboard or desired page
+            } else {
+                const errorMessage = document.getElementById('errorMessage');
+                errorMessage.textContent = 'Invalid username or password';
+                const errorDialog = document.getElementById('errorDialog');
+                errorDialog.style.display = 'block';
+            }
+        });
+
+        document.getElementById('closeDialog').addEventListener('click', function() {
+            const errorDialog = document.getElementById('errorDialog');
+            errorDialog.style.display = 'none';
+        });
+    </script>
+</body>
+</html>

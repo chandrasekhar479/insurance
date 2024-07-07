@@ -1,0 +1,38 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color: rgb(12, 141, 8); /* Teal color */
+    color: #fff; /* White text */
+    text-align: center;
+    padding: 20px 0;
+}
+
+#options {
+    max-width: 400px;
+    margin: 50px auto;
+    text-align: center;
+}
+
+h2 {
+    color: #333; /* Dark gray text */
+}
+
+.button {
+    display: inline-block;
+    background-color: pink; /* Teal color */
+    color: #fff; /* White text */
+    padding: 10px 20px;
+    text-decoration: none;
+    margin: 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.button:hover {
+    background-color: #9d2929; /* Darker teal color on hover */
+}

@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Insurance Claim Dashboard</title>
+    <link rel="stylesheet" href="../static/insure_claim_dashboard_page.css">
+</head>
+<style>
+    body {
+        background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQzkjok-PGkwepVZqaROeW8SyNlV3CGS8zoIlO7rmRpWQ&s'); /* Replace 'your-image.jpg' with the path to your image */
+        background-color: #f0f0f0; /* Replace #f0f0f0 with your desired background color */
+        background-size: cover;
+        background-position: center;
+        font-family: Arial, sans-serif; /* Optional: Change the font family */
+        margin: 0;
+        padding: 0;
+    }
+    </style>
+
+<body>
+    <h1>Insurance  Dashboard</h1>
+
+    <h2>Add your insurance vehicles</h2>
+    <form id="claimForm">
+        <input type="text" id="details" placeholder="Details related to insurance" required><br>
+        <input type="file" id="imgFile" accept="image/*" required><br>
+        <button type="submit">Submit Claim</button>
+    </form>
+
+    <h2>Your Claims</h2>
+    <div id="claimsList"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.6.0/dist/web3.min.js"></script>
+    <script>
+        const web3 = new Web3(window.ethereum);
+
+        const contractAddress = '0xBd10480dFC975D72430D0706db365dBe9785D7C7';
+        const abi = [
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "_details",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_imgPath",
+				"type": "string"
+			}
+		],
+		"name": "applyClaim",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_claimId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "_status",
+				"type": "string"
+			}
+		],
+		"name": "updateClaimStatus",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "claimCount",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "claims",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "applicant",
+				"type": "address"
+			},
+			{
+				"internalType": "string",
+				"name": "details",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "imgPath",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "status",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	}
+]; // Paste your contract ABI here
+        const contract = new web3.eth.Contract(abi, contractAddress);
+
+        async function displayClaims() {
+            const claimsList = document.getElementById('claimsList');
+            claimsList.innerHTML = '';
+
+            const claimCount = await contract.methods.claimCount().call({ from: web3.eth.defaultAccount });
+            for (let i = 1; i <= claimCount; i++) {
+                const claim = await contract.methods.claims(i).call({ from: web3.eth.defaultAccount });
+                let statusColor = '';
+                if (claim.status === 'Pending') {
+                    statusColor = '#fff956';
+                } else if (claim.status === 'Accepted') {
+                    statusColor = '#56ff91';
+                } else if (claim.status === 'Rejected') {
+                    statusColor = '#ff5656';
+                }
+                claimsList.innerHTML += `
+                    <div class="claim-box" style="background-color: ${statusColor};">
+                        <p>Details: ${claim.details}</p>
+                        <p>Status: ${claim.status}</p>
+                        <img src="assets/${claim.imgPath}" alt="Insurance Image" class="claim-img">
+                    </div>
+                `;
+            }
+        }
+
+        document.getElementById('claimForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const details = document.getElementById('details').value;
+            const imgFile = document.getElementById('imgFile').files[0];
+            console.log('Image File:', imgFile); // Log the image file object
+            
+            // Check if imgFile exists and has a name property
+            if (!imgFile || !imgFile.name) {
+                alert('Please select an image file.');
+                return;
+            }
+
+            const imgName = imgFile.name; // Extract the file name
+            console.log('Image Name:', imgName); // Log the image name
+
+            await contract.methods.applyClaim(details, imgName).send({ from: web3.eth.defaultAccount });
+
+            alert('Claim submitted successfully');
+            displayClaims();
+        });
+
+        window.ethereum.enable().then(() => {
+            web3.eth.getAccounts().then((accounts) => {
+                web3.eth.defaultAccount = accounts[0];
+                displayClaims();
+            });
+        });
+    </script>
+</body>
+</html>

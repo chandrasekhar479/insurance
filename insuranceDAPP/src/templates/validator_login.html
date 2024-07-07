@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Validator Login</title>
+    <link rel="stylesheet" href="../static/validator_login_page.css">
+</head>
+<style>
+    body {
+        background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR7rWuXoRmuFtZGfZV2qCcoUL5an0m5Lq_zUg&s'); /* Replace 'your-image.jpg' with the path to your image */
+        background-color: #f0f0f0; /* Replace #f0f0f0 with your desired background color */
+        background-size: cover;
+        background-position: center;
+        font-family: Arial, sans-serif; /* Optional: Change the font family */
+        margin: 0;
+        padding: 0;
+    }
+    </style>
+
+<body>
+    <h1>Validator Login</h1>
+
+    <form id="login">
+        <input type="text" id="username" placeholder="Username" required><br>
+        <input type="password" id="password" placeholder="Password" required><br>
+        <button type="submit">Login</button>
+    </form>
+
+    <p>Don't have an account? <a href="validator_signup.html">Sign Up</a></p>
+
+    <script>
+        document.getElementById('login').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const storedUsername = localStorage.getItem('validator_username');
+            const storedPassword = localStorage.getItem('validator_password');
+            if (username === storedUsername && password === storedPassword) {
+                alert('Login Successful');
+                window.location.href = 'validator_signup.html'; // Redirect to dashboard or desired page
+            } else {
+                alert('Invalid username or password');
+            }
+        });
+    </script>
+</body>
+</html>
