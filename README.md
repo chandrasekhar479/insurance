@@ -1,3 +1,11 @@
+
+Insurance DApp (Decentralized Insurance Platform) | Solidity, Ethereum, Web3.js, MetaMask, HTML/CSS/JS
+
+1. Developed a decentralized insurance application on the Ethereum blockchain using Solidity smart contracts to handle policy creation, claims, and approvals in a trustless, tamper-proof manner.
+2. Integrated MetaMask wallet for secure user authentication and blockchain transactions, enabling users to buy insurance policies and submit claims directly through their crypto wallet.
+3. Built an admin panel allowing authorized admins to review, approve, or reject submitted claims, with all decisions recorded immutably on-chain.
+4. Designed a responsive frontend using HTML, CSS, and JavaScript, integrated with Web3.js to interact with smart contracts and display real-time policy details fetched directly from the blockchain.
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
